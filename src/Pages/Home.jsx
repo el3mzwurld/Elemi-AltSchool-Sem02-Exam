@@ -1,14 +1,19 @@
 import { Toolbar } from "../components/Toolbar";
 import { TextArea } from "../components/TextArea";
 import { Sidebar, SidebarClose } from "lucide-react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 const MarkdownApp = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
   return (
     <div className="home-container">
       <header className="header">
         <nav className="nav">
           <div className="nav_logo">
-            <div className="side-logo">
+            <div className="side-logo" onClick={toggleSidebar}>
               <Sidebar color="#e25d5d" size={20} className="ico" />
             </div>
             <h2> elemz.md</h2>
@@ -44,8 +49,10 @@ const MarkdownApp = () => {
         </nav>
       </header>
 
-      <div className="sidebar">
-        <div className="sidebar-close"></div>
+      <div className={`sidebar ${isSidebarOpen ? "active" : ""}`}>
+        <div className="sidebar-close" onClick={toggleSidebar}>
+          <SidebarClose size={30} color="#e25d5d" />
+        </div>
       </div>
 
       <main className="main">
