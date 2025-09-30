@@ -1,0 +1,67 @@
+:root {
+  --bg-main: #1e1e1e;
+  --bg-sec: #2a2a2a;
+  --txt-white: #ffffff;
+  --txt-gray: #b3b3b3;
+  --txt-accent: #e25d5d;
+  --main-txt: system-ui, Arial, sans-serif, Helvetica;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--main-txt);
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  background: var(--bg-main);
+  color: var(--txt-white);
+  font-size: 20px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  a {
+    color: var(--txt-accent);
+    text-decoration: underline;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--txt-accent);
+    font-weight: 600;
+  }
+
+  ::selection {
+    background: var(--txt-accent);
+    color: var(--txt-white);
+  }
+}
+
+@media (min-width: 300px) and (max-width: 400px) {
+  body {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  #root {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+  }
+}
