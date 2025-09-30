@@ -1,41 +1,25 @@
-# Compiled Lua sources
-luac.out
+# Dependencies
+node_modules
+dist
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
+# Local environment files
+.env
+.env.local
+.env.*.local
 
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
+# Editor settings
+.vscode/
+.idea/
 
-# Precompiled Headers
-*.gch
-*.pch
+# OS / System files
+.DS_Store
+Thumbs.db
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-*.def
-*.exp
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
+# Build output (if generated separately)
+build
