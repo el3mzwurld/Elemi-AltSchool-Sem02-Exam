@@ -42,7 +42,7 @@ body {
   h5,
   h6 {
     color: var(--txt-accent);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   ::selection {

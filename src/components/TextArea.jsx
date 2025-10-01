@@ -18,6 +18,7 @@ export const TextArea = ({ markdown, setMarkdown }) => {
         theme={"dark"}
         extensions={[ext()]}
         onChange={handleChange}
+        style={{ fontSize: 14 }}
       />
     </div>
   );

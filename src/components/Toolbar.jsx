@@ -1,4 +1,4 @@
-import { Bold, Heading, List, Link, Table, Trash } from "lucide-react";
+import { Bold, Heading, List, Link, Table, Trash, Image } from "lucide-react";
 
 export const Toolbar = ({ markdown, setMarkdown }) => {
   const addBold = () => {
@@ -27,26 +27,37 @@ export const Toolbar = ({ markdown, setMarkdown }) => {
   const clearAll = () => {
     setMarkdown("");
   };
+  const addImage = () => {
+    const url = prompt("Enter image URL:");
+    if (!url) return;
+
+    const alt = prompt("Enter alt text (optional):") || "image";
+
+    setMarkdown(markdown + `\n![${alt}](${url})\n`);
+  };
 
   return (
     <div className="toolbar-container">
-      <div className="toolbar-item">
-        <Bold color="#e25d5d" onClick={addBold} />
+      <div className="toolbar-item" onClick={addBold}>
+        <Bold color="#e25d5d" />
       </div>
-      <div className="toolbar-item">
-        <Heading color="#e25d5d" onClick={addHeading} />
+      <div className="toolbar-item" onClick={addHeading}>
+        <Heading color="#e25d5d" />
       </div>
-      <div className="toolbar-item">
-        <List color="#e25d5d" onClick={addList} />
+      <div className="toolbar-item" onClick={addList}>
+        <List color="#e25d5d" />
       </div>
-      <div className="toolbar-item">
-        <Table color="#e25d5d" onClick={addTable} />
+      <div className="toolbar-item" onClick={addTable}>
+        <Table color="#e25d5d" />
       </div>
-      <div className="toolbar-item">
-        <Link color="#e25d5d" onClick={addLink} />
+      <div className="toolbar-item" onClick={addLink}>
+        <Link color="#e25d5d" />
       </div>
-      <div className="toolbar-item">
-        <Trash color="#e25d5d" onClick={clearAll} />
+      <div className="toolbar-item" onClick={clearAll}>
+        <Trash color="#e25d5d" />
+      </div>
+      <div className="toolbar-item" onClick={addImage}>
+        <Image color="#e25d5d" />
       </div>
     </div>
   );
