@@ -31,28 +31,32 @@ A markdown editor and live preview application built with **React (Vite)**, usin
 
 ## ✅ Project Structure
 
-```text
+```
 src/
- ├── assets/
- │    └── styles/
- │         ├── index.css
- │         └── global.css
- │
- ├── components/
- │    └── Toolbar.jsx
- │
- ├── pages/
- │    ├── Home.jsx
- │    ├── ErrorTest.jsx
- │    └── NotFound.jsx
- │
- ├── routes/
- │    └── AppRoutes.jsx
- │
- ├── App.jsx
- └── main.jsx
-
-
+│
+├── assets/
+│   ├── img/
+│   └── styles/
+│       └── global.css
+│
+├── components/
+│   ├── editor.jsx
+│   ├── errorboundary.jsx
+│   ├── preview.jsx
+│   ├── textarea.jsx
+│   └── toolbar.jsx
+│
+├── Pages/
+│   ├── errortest.jsx
+│   ├── home.jsx 
+│   └── notfound.jsx
+│
+├── Routes/
+│   └── router.jsx
+│
+├── App.jsx
+├── index.css
+└── main.jsx
 
 
 
