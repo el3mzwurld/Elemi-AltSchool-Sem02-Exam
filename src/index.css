@@ -50,7 +50,15 @@ body {
     color: var(--txt-white);
   }
 }
-
+button {
+  width: 150px;
+  height: 60px;
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+}
 @media (min-width: 300px) and (max-width: 400px) {
   body {
     width: 100%;

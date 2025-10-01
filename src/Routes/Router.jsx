@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import MarkdownApp from "../Pages/Home";
-import NotFound from "../Pages/NotFound";
-import ErrorTest from "../Pages/ErrorTest";
+import MarkdownApp from "../Pages/home";
+import NotFound from "../Pages/notfound";
+import ErrorTest from "../Pages/errortest";
 function AppRoutes() {
   return (
     <Routes>
