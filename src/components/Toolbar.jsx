@@ -4,6 +4,7 @@ export const Toolbar = ({ markdown, setMarkdown }) => {
   const addBold = () => {
     setMarkdown(markdown + "**bold text** ");
   };
+  // ...
 
   const addHeading = () => {
     setMarkdown(markdown + "\n# ");
