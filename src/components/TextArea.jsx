@@ -14,11 +14,12 @@ export const TextArea = ({ markdown, setMarkdown }) => {
     <div className="textarea-container">
       <CodeMirror
         value={markdown}
-        height="580px"
+        height="70vh"
         theme={"dark"}
         extensions={[ext()]}
         onChange={handleChange}
-        style={{ fontSize: 14 }}
+        style={{ fontSize: 12 }}
+        className="cm"
       />
     </div>
   );

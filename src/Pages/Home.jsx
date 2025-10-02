@@ -1,17 +1,11 @@
 import { Toolbar } from "../components/toolbar.jsx";
 import { TextArea } from "../components/textarea.jsx";
 import { Sidebar, SidebarClose } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { marked } from "marked";
 
 const MarkdownApp = () => {
-  // States
-
-  // Sidebar state
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Markdown text state
-  const [markdownTxt, setMarkdownTxt] = useState(`# Welcome to elemz.md 👋  
+  const templateMd = `# Welcome to elemz.md 👋  
 Your lightweight, live Markdown editor!
 
 This demo shows how to use **different Markdown features**.  
@@ -137,16 +131,98 @@ Use three or more:
 
 ## 🎉 You're all set!
 Start typing on the left — your preview updates instantly!
-`);
+`;
+
+  // Sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Markdown text state
+  const [markdownTxt, setMarkdownTxt] = useState(templateMd);
+
+  const [documents, setDoocuments] = useState([]);
+  useEffect(() => {
+    const savedDocs = JSON.parse(localStorage.getItem("Markdown_Docs")) || [];
+    setDoocuments(savedDocs);
+    if (savedDocs.length > 0) {
+      const latestDocument = savedDocs[savedDocs.length - 1];
+      setMarkdownTxt(latestDocument.content);
+    } else {
+      setMarkdownTxt(templateMd);
+    }
+  }, []);
+  useEffect(() => {
+    if (!markdownTxt.trim()) return;
+    setDoocuments((prev) => {
+      let updatedDocs = [...prev];
+
+      //If there's no document...one should be created....if there's one, store it
+      if (updatedDocs.length === 0) {
+        updatedDocs.push({
+          id: Date.now(),
+          name: "untitled.md",
+          content: markdownTxt,
+          updatedAt: new Date().toISOString(),
+        });
+        console.log(updatedDocs);
+      } else {
+        updatedDocs[updatedDocs.length - 1] = {
+          ...updatedDocs[updatedDocs - 1],
+          content: markdownTxt,
+          updatedAt: new Date().toISOString(),
+        };
+      }
+
+      localStorage.setItem("Markdown_Docs", JSON.stringify(updatedDocs));
+      return updatedDocs;
+    });
+  }, [markdownTxt]);
 
   // Preview type state
   const [previewMode, setPreviewMode] = useState("Preview");
 
+  const parsedHTML = marked(markdownTxt || "");
+
+  //Functions
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+  const saveFile = () => {
+    const unfil = prompt("Please enter a file name:", "Untitled.md");
+    if (!unfil) return;
 
-  const parsedHTML = marked(markdownTxt);
+    const fileName = unfil.endsWith(".md") ? unfil : `${unfil}.md`;
+
+    const Doc = {
+      id: Date.now(),
+      name: fileName,
+      content: markdownTxt,
+      updatedAt: new Date().toISOString(),
+    };
+
+    setDoocuments((prev) => {
+      const updatedDocs = [...prev, Doc];
+      localStorage.setItem("Markdown_Docs", JSON.stringify(updatedDocs));
+      return updatedDocs;
+    });
+
+    downloadFile(fileName);
+  };
+
+  const downloadFile = (file) => {
+    if (!file) return;
+
+    const blob = new Blob([markdownTxt], { type: "text/markdown" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = file;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  const clearStorage = () => {
+    localStorage.clear("Markdown_Docs");
+    location.reload();
+  };
 
   return (
     <div className="home-container">
@@ -179,9 +255,7 @@ Start typing on the left — your preview updates instantly!
               <p>Save as</p>
 
               <div className="nav_dropdowns_item_menu">
-                <p>.pdf</p>
-                <p>.html</p>
-                <p>.md</p>
+                <p onClick={saveFile}>.md</p>
               </div>
             </div>
           </div>
@@ -189,18 +263,15 @@ Start typing on the left — your preview updates instantly!
       </header>
 
       <div className={`sidebar ${isSidebarOpen ? "active" : ""}`}>
-        <div className="sidebar-close" onClick={toggleSidebar}>
+        <div className="sidebar_close" onClick={toggleSidebar}>
           <SidebarClose size={30} color="#e25d5d" />
         </div>
 
-        <div className="sidebar-content">
+        <div className="sidebar_content">
           <ul className="sidebar-content-container">
             <li className="sidebar-content-link">
               <p>DOCUMENTS</p>
-              <ul>
-                <li></li>
-                <li></li>
-              </ul>
+              <ul></ul>
             </li>
             <li className="sidebar-content-link" id="sidebar-btn-new-doc">
               <button>NEW DOCUMENT</button>
@@ -208,7 +279,11 @@ Start typing on the left — your preview updates instantly!
             <li className="sidebar-content-link" id="sidebar-btn-save-sess">
               <button>SAVE SESSION</button>
             </li>
-            <li className="sidebar-content-link" id="sidebar-btn-clr-doc">
+            <li
+              className="sidebar-content-link"
+              id="sidebar-btn-clr-doc"
+              onClick={clearStorage}
+            >
               <p>DELTE ALL DOCUMENTS</p>
             </li>
           </ul>
@@ -225,7 +300,7 @@ Start typing on the left — your preview updates instantly!
         </section>
         <section className="preview-container">
           <div className="preview-language">
-            <p>{previewMode}</p>
+            <p>{previewMode.toUpperCase()}</p>
             <p>PREVIEW</p>
           </div>
           <div className="preview-content">

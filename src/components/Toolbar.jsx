@@ -38,26 +38,26 @@ export const Toolbar = ({ markdown, setMarkdown }) => {
 
   return (
     <div className="toolbar-container">
-      <div className="toolbar-item" onClick={addBold}>
-        <Bold color="#e25d5d" />
+      <div className="toolbar-container-item" onClick={addBold}>
+        <Bold size={15} color="#e25d5d" aria-label="Bold" />
       </div>
-      <div className="toolbar-item" onClick={addHeading}>
-        <Heading color="#e25d5d" />
+      <div className="toolbar-container-item" onClick={addHeading}>
+        <Heading size={15} color="#e25d5d" aria-label="Header" />
       </div>
-      <div className="toolbar-item" onClick={addList}>
-        <List color="#e25d5d" />
+      <div className="toolbar-container-item" onClick={addList}>
+        <List size={15} color="#e25d5d" />
       </div>
-      <div className="toolbar-item" onClick={addTable}>
-        <Table color="#e25d5d" />
+      <div className="toolbar-container-item" onClick={addTable}>
+        <Table size={15} color="#e25d5d" />
       </div>
-      <div className="toolbar-item" onClick={addLink}>
-        <Link color="#e25d5d" />
+      <div className="toolbar-container-item" onClick={addLink}>
+        <Link size={15} color="#e25d5d" />
       </div>
-      <div className="toolbar-item" onClick={clearAll}>
-        <Trash color="#e25d5d" />
+      <div className="toolbar-container-item" onClick={clearAll}>
+        <Trash size={15} color="#e25d5d" />
       </div>
-      <div className="toolbar-item" onClick={addImage}>
-        <Image color="#e25d5d" />
+      <div className="toolbar-container-item" onClick={addImage}>
+        <Image size={15} color="#e25d5d" />
       </div>
     </div>
   );
