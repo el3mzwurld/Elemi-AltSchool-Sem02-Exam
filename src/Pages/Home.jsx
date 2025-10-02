@@ -433,6 +433,9 @@ Start typing on the left — your preview updates instantly!
             >
               <p>DELTE ALL DOCUMENTS</p>
             </li>
+            <li className="sidebar-content-link">
+              <Link to="*">Test 404</Link>
+            </li>
           </ul>
         </div>
       </aside>
