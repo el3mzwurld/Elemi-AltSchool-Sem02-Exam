@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import MarkdownApp from "../Pages/home";
-import NotFound from "../Pages/notfound";
+import MarkdownApp from "../Pages/Home";
+import NotFound from "../Pages/NotFound";
 import ErrorTest from "../components/errortest";
-import ErrorBoundary from "../components/errorboundary";
+import ErrorBoundary from "../components/ErrorBoundary";
 function AppRoutes() {
   return (
     <ErrorBoundary>

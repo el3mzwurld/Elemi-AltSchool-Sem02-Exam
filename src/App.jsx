@@ -1,4 +1,4 @@
-import AppRoutes from "./Routes/router.jsx";
+import AppRoutes from "./Routes/Router.jsx";
 import "./assets/styles/global.css";
 function App() {
   return (

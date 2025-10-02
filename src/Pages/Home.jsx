@@ -1,5 +1,5 @@
 import { Toolbar } from "../components/toolbar.jsx";
-import { TextArea } from "../components/textarea.jsx";
+import { TextArea } from "../components/TextArea.jsx";
 import { Sidebar, SidebarClose } from "lucide-react";
 import { useEffect, useState } from "react";
 import { marked } from "marked";
