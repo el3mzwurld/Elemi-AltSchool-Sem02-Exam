@@ -3,8 +3,11 @@ import { TextArea } from "../components/textarea.jsx";
 import { Sidebar, SidebarClose } from "lucide-react";
 import { useEffect, useState } from "react";
 import { marked } from "marked";
+import { Link } from "react-router-dom";
+import loading_img from "../assets/img/loading_img.svg";
 
 const MarkdownApp = () => {
+  // Template string
   const templateMd = `# Welcome to elemz.md 👋  
 Your lightweight, live Markdown editor!
 
@@ -135,14 +138,20 @@ Start typing on the left — your preview updates instantly!
 
   // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   // Markdown text state
   const [markdownTxt, setMarkdownTxt] = useState(templateMd);
+  // Preview type state
+  const [previewMode, setPreviewMode] = useState("Preview");
+  //Documents state
+  const [documents, setDocuments] = useState([]);
+  //Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [documents, setDoocuments] = useState([]);
+  // Mount and Update effects
   useEffect(() => {
     const savedDocs = JSON.parse(localStorage.getItem("Markdown_Docs")) || [];
-    setDoocuments(savedDocs);
+    setDocuments(savedDocs);
+
     if (savedDocs.length > 0) {
       const latestDocument = savedDocs[savedDocs.length - 1];
       setMarkdownTxt(latestDocument.content);
@@ -152,7 +161,7 @@ Start typing on the left — your preview updates instantly!
   }, []);
   useEffect(() => {
     if (!markdownTxt.trim()) return;
-    setDoocuments((prev) => {
+    setDocuments((prev) => {
       let updatedDocs = [...prev];
 
       //If there's no document...one should be created....if there's one, store it
@@ -166,7 +175,7 @@ Start typing on the left — your preview updates instantly!
         console.log(updatedDocs);
       } else {
         updatedDocs[updatedDocs.length - 1] = {
-          ...updatedDocs[updatedDocs - 1],
+          ...updatedDocs[updatedDocs.length - 1],
           content: markdownTxt,
           updatedAt: new Date().toISOString(),
         };
@@ -177,15 +186,16 @@ Start typing on the left — your preview updates instantly!
     });
   }, [markdownTxt]);
 
-  // Preview type state
-  const [previewMode, setPreviewMode] = useState("Preview");
-
+  //Markdown parser
   const parsedHTML = marked(markdownTxt || "");
 
-  //Functions
+  //Helper Functions
+
+  // Open/Close sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+  // Save current file to local storage
   const saveFile = () => {
     const unfil = prompt("Please enter a file name:", "Untitled.md");
     if (!unfil) return;
@@ -199,16 +209,19 @@ Start typing on the left — your preview updates instantly!
       updatedAt: new Date().toISOString(),
     };
 
-    setDoocuments((prev) => {
+    setDocuments((prev) => {
       const updatedDocs = [...prev, Doc];
       localStorage.setItem("Markdown_Docs", JSON.stringify(updatedDocs));
       return updatedDocs;
     });
-
-    downloadFile(fileName);
   };
+  // Download .md file
+  const downloadFile = () => {
+    const unfil = prompt("Please enter a file name:", "Untitled.md");
+    if (!unfil) return;
 
-  const downloadFile = (file) => {
+    const file = unfil.endsWith(".md") ? unfil : `${unfil}.md`;
+
     if (!file) return;
 
     const blob = new Blob([markdownTxt], { type: "text/markdown" });
@@ -218,16 +231,93 @@ Start typing on the left — your preview updates instantly!
     link.click();
     URL.revokeObjectURL(link.href);
   };
-
+  // Clear documents from local storage
   const clearStorage = () => {
     localStorage.clear("Markdown_Docs");
     location.reload();
+  };
+  // Create New document
+  const initDoc = () => {
+    const untitledCounter = documents.filter((doc) =>
+      doc.name.startsWith("untitled" || "Untitled")
+    ).length;
+
+    const newDocument = {
+      id: Date.now(),
+      name:
+        untitledCounter === 0
+          ? "untitled.md"
+          : `untitled(${untitledCounter}).md`,
+      content: templateMd,
+      updatedAt: new Date().toISOString(),
+    };
+
+    setDocuments((prev) => {
+      const updatedDocs = [...prev, newDocument];
+      localStorage.setItem("Markdown_Docs", JSON.stringify(updatedDocs));
+      return updatedDocs;
+    });
+
+    setMarkdownTxt("");
+    toggleSidebar();
+  };
+  // Render document from sidebar
+  const renderDoc = (id) => {
+    const doc = documents.find((d) => d.id === id);
+
+    if (doc) {
+      setMarkdownTxt(doc.content);
+    }
+  };
+  // Import .md file from local device
+  const importLocal = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    //Check if the file is a .md file
+    if (!file.name.endsWith(".md")) {
+      setMarkdownTxt("Invalid File, Import a markdown file");
+      return;
+    }
+    setIsLoading(true);
+    console.log(isLoading);
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      setTimeout(() => {
+        const importedContent = e.target.result;
+        setMarkdownTxt(importedContent);
+
+        const newDoc = {
+          id: Date.now(),
+          name: file.name,
+          content: importedContent,
+          updatedAt: new Date().toISOString(),
+        };
+
+        setDocuments((prev) => {
+          const updatedDocs = [...prev, newDoc];
+          localStorage.setItem("Markdown_Docs", JSON.stringify(updatedDocs));
+          return updatedDocs;
+        });
+
+        setIsLoading(false);
+        event.target.value = "";
+      }, 5000);
+    };
+
+    reader.onerror = () => {
+      console.log("Error reading file");
+      setIsLoading(false);
+      event.target.value = "";
+    };
+    reader.readAsText(file);
   };
 
   return (
     <div className="home-container">
       <header className="header">
-        <nav className="nav">
+        <nav className="nav" aria-label="Main navigation">
           <div className="nav_logo">
             <div className="side-logo" onClick={toggleSidebar}>
               <Sidebar color="#e25d5d" size={20} className="ico" />
@@ -248,21 +338,42 @@ Start typing on the left — your preview updates instantly!
               <p>Import</p>
 
               <div className="nav_dropdowns_item_menu">
-                <p>.md</p>
+                <p
+                  onClick={() => {
+                    document.getElementById("mdFileInput").click();
+                  }}
+                >
+                  .md
+                </p>
               </div>
             </div>
             <div className="nav_dropdowns_item">
-              <p>Save as</p>
+              <p>Download</p>
 
               <div className="nav_dropdowns_item_menu">
-                <p onClick={saveFile}>.md</p>
+                <p onClick={downloadFile}>.md</p>
+                <input
+                  type="file"
+                  accept=".md"
+                  name=""
+                  style={{ display: "none" }}
+                  id="mdFileInput"
+                  onChange={importLocal}
+                />
               </div>
+            </div>
+            <div className="nav_dropdowns_item">
+              <Link to="/error">Trigger error</Link>
             </div>
           </div>
         </nav>
       </header>
 
-      <div className={`sidebar ${isSidebarOpen ? "active" : ""}`}>
+      <aside
+        className={`sidebar ${isSidebarOpen ? "active" : ""}`}
+        role="complementary"
+        aria-label="Document History Sidebar"
+      >
         <div className="sidebar_close" onClick={toggleSidebar}>
           <SidebarClose size={30} color="#e25d5d" />
         </div>
@@ -271,47 +382,115 @@ Start typing on the left — your preview updates instantly!
           <ul className="sidebar-content-container">
             <li className="sidebar-content-link">
               <p>DOCUMENTS</p>
-              <ul></ul>
+              <ul role="list">
+                {documents.length > 0 ? (
+                  documents.map((doc) => (
+                    <li
+                      className="sidebar-content-link-item"
+                      key={doc.id}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Open ${doc.name}`}
+                      onClick={() => {
+                        toggleSidebar();
+                        renderDoc(doc.id);
+                      }}
+                    >
+                      {doc.name}
+                    </li>
+                  ))
+                ) : (
+                  <li key={null} className="sidebar-content-link-item empty">
+                    No saved documents
+                  </li>
+                )}
+              </ul>
             </li>
             <li className="sidebar-content-link" id="sidebar-btn-new-doc">
-              <button>NEW DOCUMENT</button>
+              <button
+                onClick={initDoc}
+                role="button"
+                aria-label="Create new Document"
+              >
+                NEW DOCUMENT
+              </button>
             </li>
             <li className="sidebar-content-link" id="sidebar-btn-save-sess">
-              <button>SAVE SESSION</button>
+              <button
+                onClick={saveFile}
+                role="button"
+                aria-label="Save document"
+              >
+                SAVE SESSION
+              </button>
             </li>
             <li
               className="sidebar-content-link"
               id="sidebar-btn-clr-doc"
+              role="button"
+              aria-label="Remove all documents from history"
               onClick={clearStorage}
             >
               <p>DELTE ALL DOCUMENTS</p>
             </li>
           </ul>
         </div>
-      </div>
+      </aside>
 
       <main className="main">
         {/* Body of the mkd application */}
-        <section className="editor-container">
-          <Toolbar markdown={markdownTxt} setMarkdown={setMarkdownTxt} />
-          {/* Tool bar to give a few quick access options to users */}
-          <TextArea markdown={markdownTxt} setMarkdown={setMarkdownTxt} />
-          {/* Text area to allow users type their markdown text */}
-        </section>
-        <section className="preview-container">
-          <div className="preview-language">
-            <p>{previewMode.toUpperCase()}</p>
-            <p>PREVIEW</p>
+        {isLoading ? (
+          <div
+            className="main-isLoading"
+            role="status"
+            aria-live="polite"
+            aria-label="Loading Document"
+          >
+            <img src={loading_img} alt="Loading" aria-label="Loading Image" />
           </div>
-          <div className="preview-content">
-            {/* Raw, Preview, HTML */}
-            {previewMode === "Raw" && <pre>{markdownTxt}</pre>}
-            {previewMode === "Preview" && (
-              <div dangerouslySetInnerHTML={{ __html: parsedHTML }}></div>
-            )}
-            {previewMode === "HTML" && <pre>{parsedHTML}</pre>}
-          </div>
-        </section>
+        ) : (
+          <>
+            {" "}
+            <section
+              className="editor-container"
+              aria-label="Markdown editor section"
+            >
+              <Toolbar markdown={markdownTxt} setMarkdown={setMarkdownTxt} />
+              {/* Tool bar to give a few quick access options to users */}
+              <TextArea markdown={markdownTxt} setMarkdown={setMarkdownTxt} />
+              {/* Text area to allow users type their markdown text */}
+            </section>
+            <section
+              className="preview-container"
+              aria-label="Markdown Preview section"
+            >
+              <div className="preview-language">
+                <p>{previewMode.toUpperCase()}</p>
+                <p>PREVIEW</p>
+              </div>
+              <div className="preview-content">
+                {/* Raw, Preview, HTML */}
+                {previewMode === "Raw" && (
+                  <pre role="textbox" aria-label="Raw Markdown text preview">
+                    {markdownTxt}
+                  </pre>
+                )}
+                {previewMode === "Preview" && (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: parsedHTML }}
+                    role="textbox"
+                    aria-label="Styled preview"
+                  ></div>
+                )}
+                {previewMode === "HTML" && (
+                  <pre role="textbox" aria-label="HTML text preview">
+                    {parsedHTML}
+                  </pre>
+                )}
+              </div>
+            </section>
+          </>
+        )}
       </main>
     </div>
   );

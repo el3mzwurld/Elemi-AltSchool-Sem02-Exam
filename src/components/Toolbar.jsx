@@ -38,25 +38,60 @@ export const Toolbar = ({ markdown, setMarkdown }) => {
 
   return (
     <div className="toolbar-container">
-      <div className="toolbar-container-item" onClick={addBold}>
+      <div
+        className="toolbar-container-item"
+        onClick={addBold}
+        role="button"
+        aria-label="add Bold text"
+      >
         <Bold size={15} color="#e25d5d" aria-label="Bold" />
       </div>
-      <div className="toolbar-container-item" onClick={addHeading}>
+      <div
+        className="toolbar-container-item"
+        onClick={addHeading}
+        role="button"
+        aria-label="add Header"
+      >
         <Heading size={15} color="#e25d5d" aria-label="Header" />
       </div>
-      <div className="toolbar-container-item" onClick={addList}>
+      <div
+        className="toolbar-container-item"
+        onClick={addList}
+        role="button"
+        aria-label="add List"
+      >
         <List size={15} color="#e25d5d" />
       </div>
-      <div className="toolbar-container-item" onClick={addTable}>
+      <div
+        className="toolbar-container-item"
+        onClick={addTable}
+        role="button"
+        aria-label="add Table"
+      >
         <Table size={15} color="#e25d5d" />
       </div>
-      <div className="toolbar-container-item" onClick={addLink}>
+      <div
+        className="toolbar-container-item"
+        onClick={addLink}
+        role="button"
+        aria-label="add Link"
+      >
         <Link size={15} color="#e25d5d" />
       </div>
-      <div className="toolbar-container-item" onClick={clearAll}>
+      <div
+        className="toolbar-container-item"
+        onClick={clearAll}
+        role="button"
+        aria-label="remove all text"
+      >
         <Trash size={15} color="#e25d5d" />
       </div>
-      <div className="toolbar-container-item" onClick={addImage}>
+      <div
+        className="toolbar-container-item"
+        onClick={addImage}
+        role="button"
+        aria-label="add Image"
+      >
         <Image size={15} color="#e25d5d" />
       </div>
     </div>
