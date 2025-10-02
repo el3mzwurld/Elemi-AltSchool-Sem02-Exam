@@ -113,8 +113,7 @@ Quick insert options:
 
 - Semantic elements: `<main>`, `<nav>`, `<section>`, `<aside>`
 - `aria-label`, `role`, `tabIndex`, `aria-live`
-- Keyboard-accessible sidebar and toolbar
-- Color contrast on dark theme
+
 
 ---
 
