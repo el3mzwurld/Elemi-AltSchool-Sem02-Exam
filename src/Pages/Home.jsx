@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import loading_img from "../assets/img/loading_img.svg";
 
 const MarkdownApp = () => {
-  // Template markdown string
+  //Template markdown string
   const templateMd = `# Welcome to elemz.md 👋  
 Your lightweight, live Markdown editor!
 
