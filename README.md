@@ -1,6 +1,6 @@
 # ✅ elemz.md — Markdown Preview Application
 
-A fully functional Markdown editor and previewer built with **React**, featuring real-time rendering, live syntax highlighting, local file import/export, persistent storage, error boundaries, and responsive layout.
+This is the documentation for a fully functional Markdown editor and previewer built with **React**, featuring real-time rendering, live syntax highlighting, local file import/export, persistent storage using LocalStorage, error boundaries, and responsive layouts.
 
 ## 🚀 Project Overview
 
