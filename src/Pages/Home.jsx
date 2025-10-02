@@ -1,4 +1,4 @@
-import { Toolbar } from "../components/ToolBar.jsx";
+import { Toolbar } from "../components/Toolbar.jsx";
 import { TextArea } from "../components/TextArea.jsx";
 import { Sidebar, SidebarClose } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import loading_img from "../assets/img/loading_img.svg";
 
 const MarkdownApp = () => {
-  // Template string
+  // Template markdown string
   const templateMd = `# Welcome to elemz.md 👋  
 Your lightweight, live Markdown editor!
 
