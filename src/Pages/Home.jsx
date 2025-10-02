@@ -1,4 +1,4 @@
-import { Toolbar } from "../components/toolbar.jsx";
+import { Toolbar } from "../components/ToolBar.jsx";
 import { TextArea } from "../components/TextArea.jsx";
 import { Sidebar, SidebarClose } from "lucide-react";
 import { useEffect, useState } from "react";
