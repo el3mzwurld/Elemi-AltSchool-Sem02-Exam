@@ -1,21 +1,33 @@
-import { Component } from "react";
+import { Component, ReactNode, ErrorInfo } from "react";
 import { Link } from "react-router-dom";
 import error from "../assets/img/bug_fixing.svg";
-class ErrorBoundary extends Component {
-  constructor(props) {
+
+// Define the shape of props this component accepts
+interface ErrorBoundaryProps {
+  children: ReactNode; // ReactNode = any valid React child (elements, strings, numbers, etc.)
+}
+
+// Define the shape of this component's state
+interface ErrorBoundaryState {
+  hasError: boolean; // true/false flag
+  error: Error | null; // Either an Error object or null
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error("Caught by ErrorBoundary:", error, errorInfo);
   }
 
-  render() {
+  render(): ReactNode {
     if (this.state.hasError) {
       return (
         <div className="error-show">

@@ -1,4 +1,4 @@
-const ErrorTest = () => {
+const ErrorTest = (): never => {
   throw new Error("Intentional test error");
 };
 

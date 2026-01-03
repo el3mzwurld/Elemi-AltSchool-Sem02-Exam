@@ -1,16 +1,16 @@
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown as ext } from "@codemirror/lang-markdown";
 
-export const TextArea = ({ markdown, setMarkdown }) => {
-  const handleChange = (value) => {
+interface Props {
+  markdown: string;
+  setMarkdown: (value: string) => void;
+}
+export const TextArea = ({ markdown, setMarkdown }: Props) => {
+  const handleChange = (value: string) => {
     setMarkdown(value);
   };
 
   return (
-    // <textarea
-    //   className="textarea-container"
-    //   placeholder="Enter your markdown text here..."
-    // ></textarea>
     <div className="textarea-container">
       <CodeMirror
         value={markdown}

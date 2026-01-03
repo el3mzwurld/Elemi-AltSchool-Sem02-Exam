@@ -1,34 +1,38 @@
 import { Bold, Heading, List, Link, Table, Trash, Image } from "lucide-react";
 
-export const Toolbar = ({ markdown, setMarkdown }) => {
-  const addBold = () => {
+interface Props {
+  markdown: string;
+  setMarkdown: (v: string) => void;
+}
+export const Toolbar = ({ markdown, setMarkdown }: Props) => {
+  const addBold = (): void => {
     setMarkdown(markdown + "**bold text** ");
   };
   // ...
 
-  const addHeading = () => {
+  const addHeading = (): void => {
     setMarkdown(markdown + "\n# ");
   };
 
-  const addList = () => {
+  const addList = (): void => {
     setMarkdown(markdown + "\n- ");
   };
 
-  const addLink = () => {
+  const addLink = (): void => {
     setMarkdown(markdown + "\n[link text](https://) ");
   };
 
-  const addTable = () => {
+  const addTable = (): void => {
     setMarkdown(
       markdown +
         `\n| Column 1 | Column 2 |\n|----------|----------|\n| Text     | Text     |\n`
     );
   };
 
-  const clearAll = () => {
+  const clearAll = (): void => {
     setMarkdown("");
   };
-  const addImage = () => {
+  const addImage = (): void => {
     const url = prompt("Enter image URL:");
     if (!url) return;
 

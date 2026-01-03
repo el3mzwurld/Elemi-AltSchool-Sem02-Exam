@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import notFound from "../assets/img/not-found.svg";
-const NotFound = () => {
+import { JSX } from "react";
+const NotFound = (): JSX.Element => {
   return (
     <div className="notFound">
       <header>

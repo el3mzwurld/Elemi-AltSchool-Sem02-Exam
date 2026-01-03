@@ -1,12 +1,22 @@
-import { Toolbar } from "../components/Toolbar.jsx";
-import { TextArea } from "../components/TextArea.jsx";
+import { Toolbar } from "../components/Toolbar.js";
+import { TextArea } from "../components/TextArea.js";
 import { Sidebar, SidebarClose } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ChangeEvent, JSX, useEffect, useState } from "react";
 import { marked } from "marked";
 import { Link } from "react-router-dom";
 import loading_img from "../assets/img/loading_img.svg";
 
-const MarkdownApp = () => {
+//Interface to Define document type
+interface Document {
+  id: number;
+  name: string;
+  content: string;
+  updatedAt: string;
+}
+
+type PreviewMode = "Raw" | "Preview" | "HTML";
+
+const MarkdownApp = (): JSX.Element => {
   //Template markdown string
   const templateMd = `# Welcome to elemz.md 👋  
 Your lightweight, live Markdown editor!
@@ -137,21 +147,20 @@ Start typing on the left — your preview updates instantly!
 `;
 
   // Sidebar state
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   // Markdown text state
-  const [markdownTxt, setMarkdownTxt] = useState(templateMd);
+  const [markdownTxt, setMarkdownTxt] = useState<string>(templateMd);
   // Preview type state
-  const [previewMode, setPreviewMode] = useState("Preview");
+  const [previewMode, setPreviewMode] = useState<PreviewMode>("Preview");
   //Documents state
-  const [documents, setDocuments] = useState([]);
+  const [documents, setDocuments] = useState<Document[]>([]);
   //Loading state
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Mount and Update effects
   useEffect(() => {
-    const savedDocs = JSON.parse(localStorage.getItem("Markdown_Docs")) || [];
-    setDocuments(savedDocs);
-
+    const raw = localStorage.getItem("Markdown_Docs");
+    const savedDocs: Document[] = raw ? JSON.parse(raw) : [];
     if (savedDocs.length > 0) {
       const latestDocument = savedDocs[savedDocs.length - 1];
       setMarkdownTxt(latestDocument.content);
@@ -187,16 +196,16 @@ Start typing on the left — your preview updates instantly!
   }, [markdownTxt]);
 
   //Markdown parser
-  const parsedHTML = marked(markdownTxt || "");
+  const parsedHTML = marked(markdownTxt || "") as string;
 
   //Helper Functions
 
   // Open/Close sidebar
-  const toggleSidebar = () => {
+  const toggleSidebar = (): void => {
     setIsSidebarOpen((prev) => !prev);
   };
   // Save current file to local storage
-  const saveFile = () => {
+  const saveFile = (): void => {
     const unfil = prompt("Please enter a file name:", "Untitled.md");
     if (!unfil) return;
 
@@ -216,7 +225,7 @@ Start typing on the left — your preview updates instantly!
     });
   };
   // Download .md file
-  const downloadFile = () => {
+  const downloadFile = (): void => {
     const unfil = prompt("Please enter a file name:", "Untitled.md");
     if (!unfil) return;
 
@@ -232,17 +241,17 @@ Start typing on the left — your preview updates instantly!
     URL.revokeObjectURL(link.href);
   };
   // Clear documents from local storage
-  const clearStorage = () => {
-    localStorage.clear("Markdown_Docs");
+  const clearStorage = (): void => {
+    localStorage.clear();
     location.reload();
   };
   // Create New document
-  const initDoc = () => {
+  const initDoc = (): void => {
     const untitledCounter = documents.filter((doc) =>
-      doc.name.startsWith("untitled" || "Untitled")
+      doc.name.toLowerCase().startsWith("untitled")
     ).length;
 
-    const newDocument = {
+    const newDocument: Document = {
       id: Date.now(),
       name:
         untitledCounter === 0
@@ -262,7 +271,7 @@ Start typing on the left — your preview updates instantly!
     toggleSidebar();
   };
   // Render document from sidebar
-  const renderDoc = (id) => {
+  const renderDoc = (id: number): void => {
     const doc = documents.find((d) => d.id === id);
 
     if (doc) {
@@ -270,8 +279,8 @@ Start typing on the left — your preview updates instantly!
     }
   };
   // Import .md file from local device
-  const importLocal = (event) => {
-    const file = event.target.files[0];
+  const importLocal = (event: ChangeEvent<HTMLInputElement>): void => {
+    const file = event.target.files?.[0];
     if (!file) return;
 
     //Check if the file is a .md file
@@ -283,12 +292,12 @@ Start typing on the left — your preview updates instantly!
     console.log(isLoading);
     const reader = new FileReader();
 
-    reader.onload = (e) => {
+    reader.onload = (e: ProgressEvent<FileReader>) => {
       setTimeout(() => {
-        const importedContent = e.target.result;
+        const importedContent = e.target?.result as string;
         setMarkdownTxt(importedContent);
 
-        const newDoc = {
+        const newDoc: Document = {
           id: Date.now(),
           name: file.name,
           content: importedContent,
@@ -340,7 +349,7 @@ Start typing on the left — your preview updates instantly!
               <div className="nav_dropdowns_item_menu">
                 <p
                   onClick={() => {
-                    document.getElementById("mdFileInput").click();
+                    document.getElementById("mdFileInput")?.click();
                   }}
                 >
                   .md

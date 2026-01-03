@@ -3,14 +3,16 @@ import MarkdownApp from "../Pages/Home";
 import NotFound from "../Pages/NotFound";
 import ErrorTest from "../components/errortest";
 import ErrorBoundary from "../components/ErrorBoundary";
-function AppRoutes() {
+import { JSX } from "react";
+
+function AppRoutes(): JSX.Element {
   return (
     <ErrorBoundary>
       <Routes>
-        <Route path="/" element={<MarkdownApp />}></Route>
-        <Route path="/home" element={<MarkdownApp />}></Route>
-        <Route path="/error" element={<ErrorTest />}></Route>
-        <Route path="*" element={<NotFound />}></Route>
+        <Route path="/" element={<MarkdownApp />} />
+        <Route path="/home" element={<MarkdownApp />} />
+        <Route path="/error" element={<ErrorTest />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </ErrorBoundary>
   );
