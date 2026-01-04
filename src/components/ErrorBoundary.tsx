@@ -4,13 +4,12 @@ import error from "../assets/img/bug_fixing.svg";
 
 // Define the shape of props this component accepts
 interface ErrorBoundaryProps {
-  children: ReactNode; // ReactNode = any valid React child (elements, strings, numbers, etc.)
+  children: ReactNode;
 }
 
-// Define the shape of this component's state
 interface ErrorBoundaryState {
-  hasError: boolean; // true/false flag
-  error: Error | null; // Either an Error object or null
+  hasError: boolean;
+  error: Error | null;
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
